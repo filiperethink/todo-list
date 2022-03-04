@@ -41,3 +41,8 @@
   border: 1px solid #fff;
   background-color: #465e7c;
 }
+
+.error {
+  color: red;
+  font-size: 12px;
+}

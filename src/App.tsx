@@ -1,20 +1,59 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Header from "./components/Header/Header";
 
 function App() {
-  const title: string = "Rethink | Todo List App";
+  const [todo, setTodoText] = useState<string>("");
+  const [todos, setTodos] = useState<string[]>([]);
+  const [error, setError] = useState<boolean>(false);
+
+  const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    setTodoText(value);
+    setError(false);
+  };
+
+  const onAddTodo = () => {
+    if (todo) {
+      setError(false);
+      setTodos([todo, ...todos]);
+      setTodoText("");
+    } else {
+      setError(true);
+    }
+  };
 
   return (
     <div className='container'>
-      <Header title={title} />
-
-      <form className='form'>
-        <input type='text' className='input' placeholder='Add a task' />
-        <button type='submit' className='btn'>
-          Add a task
+      <Header />
+      <div className='form'>
+        <input
+          onChange={onChangeText}
+          type='text'
+          name='addTask'
+          className='input'
+          value={todo}
+          placeholder='Add uma Tarefa'
+        />
+        <button onClick={onAddTodo} type='submit' className='btn'>
+          Add Tarefa
         </button>
-      </form>
+      </div>
+      {error && (
+        <p className='error'>
+          Encontramos um erro, por favor insira uma tarefa!
+        </p>
+      )}
+
+      <div className='todos'>
+        {todos.length > 0 ? (
+          todos.map((todo, index) => {
+            return <p key={index}>{todo}</p>;
+          })
+        ) : (
+          <p>Nenhuma tarefa até agora!</p>
+        )}
+      </div>
     </div>
   );
 }
